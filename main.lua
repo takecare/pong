@@ -12,7 +12,11 @@ push = require 'push'
     Runs when the game first starts up, only once; used to initialize the game.
 ]]
 function love.load()
-    -- 
+    -- load new font
+    font = love.graphics.newFont('font.ttf', 8)
+    love.graphics.setFont(font)
+
+    -- setup push library (allows to render in virtual rez)
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
         fullscreen = false,
         resizable = true, -- debugging only
