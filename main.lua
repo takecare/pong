@@ -18,6 +18,12 @@ player2pos = VIRTUAL_HEIGHT / 2 - (PADDLE_HEIGHT / 2)
 
 ballX = VIRTUAL_WIDTH/2 - (BALL_SIZE/2)
 ballY = VIRTUAL_HEIGHT/2 - (BALL_SIZE/2)
+ballDX = 0
+ballDY = 0
+ballSpeed = 50
+
+gameState = 'paused'
+title = 'p o n g'
 
 push = require 'push'
 
@@ -29,8 +35,6 @@ function love.load()
 
     font = love.graphics.newFont('font.ttf', 8)
     scoreFont = love.graphics.newFont('font.ttf', 32)
-    
-    love.graphics.setFont(font)
 
     -- setup push library (allows to render in virtual rez)
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
@@ -39,6 +43,9 @@ function love.load()
         vsync = true
     })
 
+    ballDX = math.random(2) == 1 and ballSpeed or -ballSpeed -- ternary operator
+    ballDY = math.random(-ballSpeed, ballSpeed)
+
     -- scale images using nearest neigbour interpolation
     love.graphics.setDefaultFilter('nearest', 'nearest')
 end
@@ -46,7 +53,13 @@ end
 function love.update(dt)
     handleInput(dt)
 
-    ballX = ballX + 50 * dt
+    if (gameState == 'playing') then
+        title = player1score .. ' ' .. player2score -- TODO unnecessary on every update()
+        ballX = ballX + ballDX * dt
+        ballY = ballY + ballDY * dt
+    elseif (gameState == 'paused') then
+        title = 'paused'
+    end
 end
 
 function love.draw()
@@ -63,11 +76,27 @@ function love.draw()
     love.graphics.rectangle('fill', ballX, ballY, BALL_SIZE, BALL_SIZE) -- ball
 
     love.graphics.setFont(scoreFont)
-    love.graphics.printf('0 0', 0, 5, VIRTUAL_WIDTH, 'center')
+    love.graphics.printf(title, 0, 5, VIRTUAL_WIDTH, 'center')
     push:apply('end')
 end
 
+function love.keypressed(key)
+    if key == 'space' then
+        if gameState == 'playing' then
+            gameState = 'paused'
+        elseif gameState == 'paused' then
+            gameState = 'playing'
+        end
+    elseif key == 'escape' then
+        love.event.quit()
+    end
+end
+
 function handleInput(dt)
+    if gameState == 'paused' then
+        return
+    end
+    
     if love.keyboard.isDown('w') and (player1pos >= 0) then
         player1pos = player1pos - PADDLE_SPEED * dt
     elseif love.keyboard.isDown('s') and (player1pos + PADDLE_HEIGHT < VIRTUAL_HEIGHT) then
@@ -78,11 +107,5 @@ function handleInput(dt)
         player2pos = player2pos - PADDLE_SPEED * dt
     elseif love.keyboard.isDown('k') and (player2pos + PADDLE_HEIGHT < VIRTUAL_HEIGHT) then
         player2pos = player2pos + PADDLE_SPEED * dt
-    end
-end
-
-function love.keypressed(key)
-    if key == 'escape' then
-        love.event.quit()
     end
 end
