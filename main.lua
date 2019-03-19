@@ -1,38 +1,43 @@
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 
-push = require 'push '
+VIRTUAL_WIDTH = 432
+VIRTUAL_HEIGHT = 243
+
+DEFAULT_FONT_HEIGHT = 6
+
+push = require 'push'
 
 --[[
     Runs when the game first starts up, only once; used to initialize the game.
 ]]
 function love.load()
-    love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {
+    -- 
+    push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
         fullscreen = false,
-        resizable = false,
+        resizable = true, -- debugging only
         vsync = true
     })
 
-    -- love.graphics.setDefaultFilter()
+    love.graphics.setDefaultFilter('nearest', 'nearest')
 end
 
 function love.update()
     -- TODO
 end
 
---[[
-    Called after update by LÖVE2D, used to draw anything to the screen, updated or otherwise.
-]]
+-- Called after update by LÖVE2D, used to draw anything to the screen, updated or otherwise.
 function love.draw()
-    love.graphics.printf(
-        'Hello Pong!',          -- text to render
-        0,                      -- starting X (0 since we're going to center it based on width)
-        WINDOW_HEIGHT / 2 - 6,  -- starting Y (halfway down the screen)
-        WINDOW_WIDTH,           -- number of pixels to center within (the entire screen here)
-        'center'                -- alignment mode, can be 'center', 'left', or 'right'
-    )
+    love.graphics.printf('Hello Pong!', 10, 10, WINDOW_WIDTH, 'left') -- can take up whole width
+    
+    push:apply('start')
+    -- love.graphics.rectangle('fill', 10, 10, 100, 100)
+    love.graphics.printf('Hello Pong!', 10, 10, VIRTUAL_WIDTH, 'left')
+    push:apply('end')
 end
 
 function love.keypressed(key)
-    --
+    if key == 'escape' then
+        love.event.quit()
+    end
 end
