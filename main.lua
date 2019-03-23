@@ -17,6 +17,7 @@ require 'Ball'
 
 function love.load()
     math.randomseed(os.time())
+    love.window.setTitle('pong')
     love.graphics.setDefaultFilter('nearest', 'nearest')
 
     push:setupScreen(virtualWidth, virtualHeight, windowWidth, windowHeight, {
@@ -53,9 +54,6 @@ function love.update(dt)
 end
 
 function love.draw()
-    love.graphics.setFont(font)
-    love.graphics.printf(windowWidth .. ' x ' .. windowHeight .. ' | ' .. virtualWidth .. ' x ' .. virtualHeight, 5, 5, windowWidth, 'left') -- can take up whole width
-    
     love.graphics.clear(0.25, 0.25, 0.25)
 
     push:apply("start")
@@ -72,6 +70,9 @@ function love.draw()
     love.graphics.printf(title, 0, 5, virtualWidth, 'center')
 
     push:apply("end")
+
+    love.graphics.setFont(font)
+    love.graphics.printf(windowWidth .. ' x ' .. windowHeight .. ' | ' .. virtualWidth .. ' x ' .. virtualHeight .. ' @ ' .. tostring(love.timer.getFPS()), 5, 5, windowWidth, 'left')
 end
 
 function love.keypressed(key)
