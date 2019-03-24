@@ -48,6 +48,13 @@ function love.update(dt)
         ball:update(dt)
         player1:update(dt)
         player2:update(dt)
+
+        if (ball:collidesWith(player1)) then
+            ball:bounceFrom(player1)
+        elseif (ball:collidesWith(player2)) then
+            ball:bounceFrom(player2)
+        end
+
     elseif (gameState == 'paused') then
         title = 'paused'
     end
@@ -84,6 +91,10 @@ function love.keypressed(key)
         end
     elseif key == 'escape' then
         love.event.quit()
+    elseif key == 'return' then
+        player1:reset()
+        player2:reset()
+        ball:reset()
     end
 end
 
