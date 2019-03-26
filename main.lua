@@ -1,5 +1,5 @@
 windowWidth, windowHeight = love.window.getDesktopDimensions()
-windowWidth, windowHeight = 1280, 960
+windowWidth, windowHeight = 1280 / 2, 960 / 2
 
 virtualWidth = 256 --windowWidth * 0.5
 virtualHeight = 192 --windowHeight * 0.5 
@@ -7,11 +7,11 @@ virtualHeight = 192 --windowHeight * 0.5
 player1score = 0
 player2score = 0
 
-gameState = 'paused'
 title = 'p o n g'
 
 push = require 'push'
 Class = require 'class'
+require 'State'
 require 'Paddle'
 require 'Ball'
 
@@ -19,6 +19,8 @@ function love.load()
     math.randomseed(os.time())
     love.window.setTitle('pong')
     love.graphics.setDefaultFilter('nearest', 'nearest')
+
+    state = State()
 
     push:setupScreen(virtualWidth, virtualHeight, windowWidth, windowHeight, {
         fullscreen = false,
@@ -40,8 +42,9 @@ function love.load()
 end
 
 function love.update(dt)
-    if (gameState == 'playing') then
-        title = player1score .. ' ' .. player2score -- TODO unnecessary on every update()
+    if (state:isPlaying()) then
+        title = state:player1Score() .. ' ' .. state:player2Score()
+
         player1:handleInput()
         player2:handleInput()
 
@@ -53,11 +56,32 @@ function love.update(dt)
             ball:bounceFrom(player1)
         elseif (ball:collidesWith(player2)) then
             ball:bounceFrom(player2)
+        elseif (ball:isOutLeft()) then
+            state:player2Scored()
+            player1Serving()
+        elseif (ball:isOutRight()) then
+            state:player1Scored()
+            player2Serving()
         end
 
-    elseif (gameState == 'paused') then
+    elseif (state:isPaused()) then
         title = 'paused'
     end
+end
+
+function player1Serving()
+    resetPlayers()
+    ball:serveToRight()
+end
+
+function player2Serving()
+    resetPlayers()
+    ball:serveToLeft()
+end
+
+function resetPlayers()
+    player1:reset()
+    player2:reset()
 end
 
 function love.draw()
@@ -84,16 +108,11 @@ end
 
 function love.keypressed(key)
     if key == 'space' then
-        if gameState == 'playing' then
-            gameState = 'paused'
-        elseif gameState == 'paused' then
-            gameState = 'playing'
-        end
+        state:togglePause()
     elseif key == 'escape' then
         love.event.quit()
     elseif key == 'return' then
-        player1:reset()
-        player2:reset()
+        resetPlayers()
         ball:reset()
     end
 end
