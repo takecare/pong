@@ -63,9 +63,14 @@ function love.update(dt)
             state:player1Scored()
             player2Serving()
         end
-
     elseif (state:isPaused()) then
         title = 'paused'
+    else 
+        if (state:player1Won()) then
+            title = 'PLAYER 1 WON'
+        elseif (state:player2Won()) then
+            title = 'PLAYER 2 WON'
+        end
     end
 end
 
@@ -108,7 +113,11 @@ end
 
 function love.keypressed(key)
     if key == 'space' then
-        state:togglePause()
+        if state:isOver() then
+            state:reset()
+        else
+            state:togglePause()
+        end
     elseif key == 'escape' then
         love.event.quit()
     elseif key == 'return' then
