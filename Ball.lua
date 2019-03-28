@@ -24,9 +24,7 @@ end
 function Ball:reset(direction)
     if (direction == nil) then
         direction = math.random(2) == 1 and 'left' or 'right'
-        print("random direction = " .. direction)
     end
-    print("direction = " .. direction)
     self.x = self.initialX
     self.y = self.initialY
     self.speed = 60
@@ -68,7 +66,6 @@ function Ball:bounceFrom(paddle)
     self.dx = -self.dx * (math.random(4) == 1 and 1.25 or 1.03)
     -- local dy = self.dy + (math.random(10, 50))
     self.dy = math.random(25, 150) * (self.dy > 0 and 1 or -1)
-    print(self.dy)
 end
 
 function Ball:render()

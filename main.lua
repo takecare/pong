@@ -1,5 +1,5 @@
 windowWidth, windowHeight = love.window.getDesktopDimensions()
-windowWidth, windowHeight = 1280 / 2, 960 / 2
+windowWidth, windowHeight = 1280 / 1, 960 / 1
 
 virtualWidth = 256 --windowWidth * 0.5
 virtualHeight = 192 --windowHeight * 0.5 
@@ -33,8 +33,8 @@ function love.load()
     local paddleHeight = 26
     local xOffset = paddleWidth + paddleWidth / 2
     local yCenter = virtualHeight / 2 - (paddleHeight / 2)
-    player1 = Paddle(xOffset, yCenter, paddleWidth, paddleHeight, 'w', 's', virtualHeight)
-    player2 = Paddle(virtualWidth - xOffset - paddleWidth, yCenter, paddleWidth, paddleHeight, 'i', 'k', virtualHeight)
+    player1 = Paddle(xOffset, yCenter, paddleWidth, paddleHeight, 'w', 's', virtualWidth, virtualHeight)
+    player2 = Paddle(virtualWidth - xOffset - paddleWidth, yCenter, paddleWidth, paddleHeight, 'i', 'k', virtualWidth, virtualHeight)
     ball = Ball(virtualWidth, virtualHeight)
     
     font = love.graphics.newFont('font.ttf', 8)
@@ -48,7 +48,7 @@ function love.update(dt)
         player1:handleInput()
         player2:handleInput()
 
-        ball:update(dt)
+        -- ball:update(dt)
         player1:update(dt)
         player2:update(dt)
 
@@ -99,6 +99,7 @@ function love.draw()
     love.graphics.setColor(1, 1, 1)
 
     player1:render()
+    player1:debug()
     player2:render()
     ball:render()
 
