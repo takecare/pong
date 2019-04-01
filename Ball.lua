@@ -46,11 +46,12 @@ function Ball:update(dt)
 end
 
 function Ball:collidesWith(paddle)
-    local minX, minY = self.x, self.y
-    local maxX, maxY = self.x + self.size, self.y + self.size
-    local paddleMinX, paddleMinY = paddle.x, paddle.y
-    local paddleMaxX, paddleMaxY = paddle.x + paddle.width, paddle.y + paddle.height
-    return (minX <= paddleMaxX and maxX >= paddleMinX) and (minY <= paddleMaxY and maxY >= paddleMinY)
+    -- local minX, minY = self.x, self.y
+    -- local maxX, maxY = self.x + self.size, self.y + self.size
+    -- local paddleMinX, paddleMinY = paddle.x, paddle.y
+    -- local paddleMaxX, paddleMaxY = paddle.x + paddle.width, paddle.y + paddle.height
+    -- return (minX <= paddleMaxX and maxX >= paddleMinX) and (minY <= paddleMaxY and maxY >= paddleMinY)
+    return paddle:collidesWith(self)
 end
 
 function Ball:isOutLeft()
