@@ -53,7 +53,7 @@ function love.update(dt)
 
         -- ball:update(dt)
         player1:update(dt)
-        player2:update(dt)
+        -- player2:update(dt)
 
         if (ball:collidesWith(player1)) then
             ball:bounceFrom(player1)
@@ -127,6 +127,10 @@ function love.keypressed(key)
     elseif key == 'return' then
         resetPlayers()
         ball:reset()
+    elseif key == 'r' then
+        player1.speed = player1.speed * 3
+    elseif key == 'f' then
+        player1.speed = player1.speed / 3
     end
 end
 
