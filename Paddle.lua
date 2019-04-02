@@ -1,7 +1,7 @@
 Paddle = Class{}
 
-function Paddle:init(width, height, upKey, downKey, screenWidth, screenHeight)
-   self.x = 0
+function Paddle:init(xOffset, width, height, upKey, downKey, screenWidth, screenHeight)
+   self.x = xOffset
    self.movement = screenHeight / 2 - (height / 2)
    self.initialMovement = y
    self.screenWidth = screenWidth
@@ -37,24 +37,25 @@ function Paddle:render()
     -- love.graphics.rectangle('fill', 2*sw+sh-math.abs(mov), 0, 5, 5)
     -- love.graphics.setColor(1, 1, 1)
 
-    self._msg = self.edge .. ' - mov=' .. math.ceil(self.movement)
-
     local mov = self.movement
     local sh = self.screenHeight
     local sw = self.screenWidth
     local h = self.height
     local w = self.width
+    local x = self.x
 
-    if (mov > 0 and mov < sh) then
+    self._msg = self.edge .. ' - mov=' .. math.ceil(self.movement) .. ' sw=' .. sw .. ' sh=' .. sh
+
+    if (mov > 0 and mov + h < sh) then
         self.edge = 'A'
-        love.graphics.rectangle('fill', self.x, mov, w, h)
+        love.graphics.rectangle('fill', x, mov, w, h)
 
     elseif (mov < 0 and mov > -sw) then
         self.edge = 'B'
         if (math.abs(mov) > 0 and math.abs(mov) < h) then
             self.edge = 'AB'
         else
-            love.graphics.rectangle('fill', math.abs(mov) - h, 0, h, w)
+            love.graphics.rectangle('fill', math.abs(mov) - h + x, 0, h, w)
         end
 
     elseif (mov < -sw and mov > -sw - sh) then
@@ -62,17 +63,15 @@ function Paddle:render()
         if (math.abs(mov) > sw and math.abs(mov) < sw+h) then
             self.edge = 'BC'
         else
-            love.graphics.rectangle('fill', sw-w, math.abs(mov)-sw-h, w, h)
+            love.graphics.rectangle('fill', sw, math.abs(mov)-sw-h, w, h)
         end
 
-    elseif (mov < -sw - sh and mov > -2 * sw - sh) then
+    elseif (mov < -sw - sh and mov > -2 * sw - sh + x) then
         self.edge = 'D'
         if (math.abs(mov) > sw+sh and math.abs(mov) < sw+sh+h) then
             self.edge = 'CD'
         else
             love.graphics.rectangle('fill', 2*sw+sh-math.abs(mov), sh-w, h, w)
-
-            self._msg = self._msg .. ' _ ' .. (2*sw-sh-math.abs(mov))
         end
 
     elseif (mov < -2 * sw - sh and mov > -2 * sw - 2 * sh) then
@@ -82,6 +81,11 @@ function Paddle:render()
         else
             self.movement = sh - h
         end
+
+    elseif (mov + h > sh) then
+        -- -706
+        -- -2 * sw - sh = -244*2-192 = -680
+        self.movement = -2 * sw - sh - h
     end
 end
 

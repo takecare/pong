@@ -34,9 +34,9 @@ function love.load()
     local xOffset = paddleWidth + paddleWidth / 2
     local yCenter = virtualHeight / 2 - (paddleHeight / 2)
 
-    player1 = Paddle(paddleWidth, paddleHeight, 'w', 's', virtualWidth - xOffset * 2, virtualHeight)
+    player1 = Paddle(xOffset, paddleWidth, paddleHeight, 'w', 's', virtualWidth - xOffset * 2, virtualHeight)
     -- player2 = Paddle(virtualWidth - xOffset - paddleWidth, yCenter, paddleWidth, paddleHeight, 'i', 'k', virtualWidth - xOffset, virtualHeight)
-    player2 = Paddle(paddleWidth, paddleHeight, 'i', 'k', virtualWidth - xOffset, virtualHeight)
+    player2 = Paddle(xOffset, paddleWidth, paddleHeight, 'i', 'k', virtualWidth - xOffset, virtualHeight)
     
     ball = Ball(virtualWidth, virtualHeight)
     
