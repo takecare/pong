@@ -34,9 +34,8 @@ function love.load()
     local xOffset = paddleWidth + paddleWidth / 2
     local yCenter = virtualHeight / 2 - (paddleHeight / 2)
 
-    player1 = Paddle(xOffset, paddleWidth, paddleHeight, 'w', 's', virtualWidth - xOffset * 2, virtualHeight)
-    -- player2 = Paddle(virtualWidth - xOffset - paddleWidth, yCenter, paddleWidth, paddleHeight, 'i', 'k', virtualWidth - xOffset, virtualHeight)
-    player2 = Paddle(xOffset, paddleWidth, paddleHeight, 'i', 'k', virtualWidth - xOffset, virtualHeight)
+    player1 = Paddle(paddleWidth, paddleHeight, xOffset, virtualWidth - xOffset * 2, virtualHeight, 'w', 's')
+    player2 = Paddle(paddleWidth, paddleHeight, virtualWidth - xOffset - paddleWidth, virtualWidth - xOffset * 2, virtualHeight, 'i', 'k')
     
     ball = Ball(virtualWidth, virtualHeight)
     
@@ -53,7 +52,7 @@ function love.update(dt)
 
         -- ball:update(dt)
         player1:update(dt)
-        -- player2:update(dt)
+        player2:update(dt)
 
         if (ball:collidesWith(player1)) then
             ball:bounceFrom(player1)
@@ -102,8 +101,9 @@ function love.draw()
     love.graphics.setColor(1, 1, 1)
 
     player1:render()
-    player1:debug()
-    -- player2:render()
+    player1:debug(20, 40)
+    player2:render()
+    player2:debug(20, 55)
     ball:render()
 
     love.graphics.setFont(scoreFont)

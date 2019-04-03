@@ -1,6 +1,6 @@
 Paddle = Class{}
 
-function Paddle:init(xOffset, width, height, upKey, downKey, screenWidth, screenHeight)
+function Paddle:init(width, height, xOffset, screenWidth, screenHeight, upKey, downKey)
    self.x = xOffset
    self.movement = screenHeight / 2 - (height / 2)
    self.initialMovement = y
@@ -44,7 +44,7 @@ function Paddle:render()
     local w = self.width
     local x = self.x
 
-    self._msg = self.edge .. ' - mov=' .. math.ceil(self.movement) .. ' sw=' .. sw .. ' sh=' .. sh
+    self._msg = self.edge .. ' - mov=' .. math.ceil(self.movement)
 
     if (mov > 0 and mov + h < sh) then
         self.edge = 'A'
@@ -83,8 +83,6 @@ function Paddle:render()
         end
 
     elseif (mov + h > sh) then
-        -- -706
-        -- -2 * sw - sh = -244*2-192 = -680
         self.movement = -2 * sw - sh - h
     end
 end
@@ -107,8 +105,10 @@ function Paddle:_moveDownwards()
     self.dy = self.speed
 end
 
-function Paddle:debug()
+function Paddle:debug(x, y)
+    local x = x ~= nil and x or 20
+    local y = y ~= nil and y or 50
     if (self._msg ~= nil) then
-        love.graphics.printf(self._msg, 20, 50, self.screenWidth, 'left')
+        love.graphics.printf(self._msg, x, y, self.screenWidth, 'left')
     end
 end
