@@ -1,8 +1,8 @@
-Paddle = Class{}
+PaddleLeft = Class{}
 
-function Paddle:init(width, height, xOffset, screenWidth, screenHeight, upKey, downKey, inverted)
+function PaddleLeft:init(width, height, xOffset, screenWidth, screenHeight, upKey, downKey)
     self.x = xOffset
-    
+
     self.movement = screenHeight / 2 - (height / 2)
     self.initialMovement = y
     self.screenWidth = screenWidth
@@ -21,20 +21,20 @@ function Paddle:init(width, height, xOffset, screenWidth, screenHeight, upKey, d
     self.edge = ''
 end
 
-function Paddle:reset()
+function PaddleLeft:reset()
     self.movement = self.initialMovement
     self.dy = 0
 end
 
-function Paddle:update(dt)
+function PaddleLeft:update(dt)
     self.movement = self.movement + self.dy * dt
 end
 
-function Paddle:collidesWith(ball)
+function PaddleLeft:collidesWith(ball)
     -- TODO
 end
 
-function Paddle:render()
+function PaddleLeft:render()
     love.graphics.setColor(1, 0, 0)
     love.graphics.rectangle('fill', self.x, 0, self.height, self.width)
     love.graphics.setColor(1, 1, 1)
@@ -57,11 +57,7 @@ function Paddle:render()
         if (math.abs(mov) > 0 and math.abs(mov) < h) then
             self.edge = 'AB'
         else
-            if (self.inverted) then
-                love.graphics.rectangle('fill', x - math.abs(mov), 0, h, w)
-            else 
-                love.graphics.rectangle('fill', math.abs(mov) - h + x, 0, h, w)
-            end
+            love.graphics.rectangle('fill', x - math.abs(mov), 0, h, w)
         end
 
     elseif (mov < -sw and mov > -sw - sh) then
@@ -97,7 +93,7 @@ function Paddle:render()
     end
 end
 
-function Paddle:handleInput()
+function PaddleLeft:handleInput()
     if love.keyboard.isDown(self.upKey) then
         self:_moveUpwards()
     elseif love.keyboard.isDown(self.downKey) then
@@ -107,15 +103,15 @@ function Paddle:handleInput()
     end
 end
 
-function Paddle:_moveUpwards()
+function PaddleLeft:_moveUpwards()
     self.dy = -self.speed
 end
 
-function Paddle:_moveDownwards()
+function PaddleLeft:_moveDownwards()
     self.dy = self.speed
 end
 
-function Paddle:debug(x, y)
+function PaddleLeft:debug(x, y)
     local x = x ~= nil and x or 20
     local y = y ~= nil and y or 50
     if (self._msg ~= nil) then

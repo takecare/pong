@@ -12,7 +12,8 @@ title = 'p o n g'
 push = require 'push'
 Class = require 'class'
 require 'State'
-require 'Paddle'
+require 'PaddleLeft'
+require 'PaddleRight'
 require 'Ball'
 
 function love.load()
@@ -33,9 +34,10 @@ function love.load()
     local paddleHeight = 26
     local xOffset = paddleWidth + paddleWidth / 2
     local yCenter = virtualHeight / 2 - (paddleHeight / 2)
+    local screenWidth = virtualWidth - xOffset * 2
 
-    player1 = Paddle(paddleWidth, paddleHeight, xOffset, virtualWidth - xOffset * 2, virtualHeight, 'w', 's')
-    player2 = Paddle(paddleWidth, paddleHeight, xOffset, virtualWidth - xOffset * 2, virtualHeight, 'i', 'k', true)
+    player1 = PaddleLeft(paddleWidth, paddleHeight, xOffset, screenWidth, virtualHeight, 'w', 's')
+    player2 = PaddleRight(paddleWidth, paddleHeight, xOffset, screenWidth, virtualHeight, 'i', 'k')
     
     ball = Ball(virtualWidth, virtualHeight)
     
