@@ -1,27 +1,29 @@
 Paddle = Class{}
 
-function Paddle:init(width, height, xOffset, screenWidth, screenHeight, upKey, downKey)
-   self.x = xOffset
-   self.movement = screenHeight / 2 - (height / 2)
-   self.initialMovement = y
-   self.screenWidth = screenWidth
-   self.screenHeight = screenHeight
+function Paddle:init(width, height, xOffset, screenWidth, screenHeight, upKey, downKey, inverted)
+    self.x = xOffset
+    
+    self.movement = screenHeight / 2 - (height / 2)
+    self.initialMovement = y
+    self.screenWidth = screenWidth
+    self.screenHeight = screenHeight
 
-   self.width = width
-   self.height = height
-   
-   self.upKey = upKey
-   self.downKey = downKey
+    self.width = width
+    self.height = height
+    
+    self.upKey = upKey
+    self.downKey = downKey
+    self.inverted = inverted ~= nil and inverted or false
 
-   self.speed = 60
-   self.dy = 0
+    self.speed = 60
+    self.dy = 0
 
-   self.edge = ''
+    self.edge = ''
 end
 
 function Paddle:reset()
-   self.movement = self.initialMovement
-   self.dy = 0
+    self.movement = self.initialMovement
+    self.dy = 0
 end
 
 function Paddle:update(dt)
@@ -33,9 +35,9 @@ function Paddle:collidesWith(ball)
 end
 
 function Paddle:render()
-    -- love.graphics.setColor(1, 0, 0)
-    -- love.graphics.rectangle('fill', 2*sw+sh-math.abs(mov), 0, 5, 5)
-    -- love.graphics.setColor(1, 1, 1)
+    love.graphics.setColor(1, 0, 0)
+    love.graphics.rectangle('fill', self.x, 0, self.height, self.width)
+    love.graphics.setColor(1, 1, 1)
 
     local mov = self.movement
     local sh = self.screenHeight
@@ -55,15 +57,23 @@ function Paddle:render()
         if (math.abs(mov) > 0 and math.abs(mov) < h) then
             self.edge = 'AB'
         else
-            love.graphics.rectangle('fill', math.abs(mov) - h + x, 0, h, w)
+            if (self.inverted) then
+                love.graphics.rectangle('fill', x - math.abs(mov), 0, h, w)
+            else 
+                love.graphics.rectangle('fill', math.abs(mov) - h + x, 0, h, w)
+            end
         end
 
     elseif (mov < -sw and mov > -sw - sh) then
         self.edge = 'C'
         if (math.abs(mov) > sw and math.abs(mov) < sw+h) then
-            self.edge = 'BC'
+            self.edge = 'BC '
         else
-            love.graphics.rectangle('fill', sw, math.abs(mov)-sw-h, w, h)
+            if (self.inverted) then
+                love.graphics.rectangle('fill', sw - x, math.abs(mov)+sw+h, w, h)
+            else
+                love.graphics.rectangle('fill', sw, math.abs(mov)-sw-h, w, h)
+            end
         end
 
     elseif (mov < -sw - sh and mov > -2 * sw - sh + x) then

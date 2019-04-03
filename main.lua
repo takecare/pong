@@ -35,7 +35,7 @@ function love.load()
     local yCenter = virtualHeight / 2 - (paddleHeight / 2)
 
     player1 = Paddle(paddleWidth, paddleHeight, xOffset, virtualWidth - xOffset * 2, virtualHeight, 'w', 's')
-    player2 = Paddle(paddleWidth, paddleHeight, virtualWidth - xOffset - paddleWidth, virtualWidth - xOffset * 2, virtualHeight, 'i', 'k')
+    player2 = Paddle(paddleWidth, paddleHeight, xOffset, virtualWidth - xOffset * 2, virtualHeight, 'i', 'k', true)
     
     ball = Ball(virtualWidth, virtualHeight)
     
@@ -129,8 +129,10 @@ function love.keypressed(key)
         ball:reset()
     elseif key == 'r' then
         player1.speed = player1.speed * 3
+        player2.speed = player2.speed * 3
     elseif key == 'f' then
         player1.speed = player1.speed / 3
+        player2.speed = player2.speed / 3
     end
 end
 
